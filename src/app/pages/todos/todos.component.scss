@@ -1,0 +1,468 @@
+.todos-container {
+  padding: 24px;
+  background-color: #f0f2f5;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 64px);
+  overflow: hidden;
+
+  @media (max-width: 768px) {
+    padding: 16px;
+  }
+
+  @media (max-width: 576px) {
+    padding: 12px;
+  }
+}
+
+.stats-card {
+  margin-bottom: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+  ::ng-deep .ant-card-body {
+    padding: 16px;
+
+    @media (max-width: 576px) {
+      padding: 12px;
+    }
+  }
+
+  .stats-row {
+    display: flex;
+    gap: 16px;
+
+    @media (max-width: 768px) {
+      gap: 12px;
+    }
+
+    @media (max-width: 576px) {
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .stat-col {
+      flex: 1;
+      text-align: center;
+
+      ::ng-deep .ant-statistic {
+        .ant-statistic-title {
+          font-size: 14px;
+          margin-bottom: 4px;
+
+          @media (max-width: 576px) {
+            font-size: 12px;
+          }
+        }
+
+        .ant-statistic-content {
+          font-size: 24px;
+          font-weight: 600;
+
+          @media (max-width: 768px) {
+            font-size: 20px;
+          }
+
+          @media (max-width: 576px) {
+            font-size: 18px;
+          }
+        }
+      }
+    }
+  }
+}
+
+.toolbar-card {
+  margin-bottom: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+  ::ng-deep .ant-card-body {
+    padding: 16px;
+
+    @media (max-width: 576px) {
+      padding: 12px;
+    }
+  }
+
+  .toolbar-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+
+    @media (max-width: 992px) {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  }
+
+  .search-input, .filter-select {
+    width: 100%;
+
+    @media (max-width: 576px) {
+      ::ng-deep .ant-input {
+        font-size: 14px;
+      }
+    }
+  }
+
+  .action-buttons {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+
+    @media (max-width: 992px) {
+      justify-content: stretch;
+    }
+
+    ::ng-deep nz-space {
+      width: 100%;
+
+      .ant-space {
+        width: 100%;
+        display: flex;
+        justify-content: flex-end;
+
+        @media (max-width: 576px) {
+          flex-direction: column;
+          gap: 8px;
+        }
+
+        button {
+          @media (max-width: 576px) {
+            width: 100%;
+          }
+
+          .button-text {
+            @media (max-width: 480px) {
+              display: none;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.list-card {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  margin-bottom: 0;
+  min-height: 0;
+  position: relative;
+
+  .loading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.9);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    gap: 16px;
+
+    .spinner {
+      width: 48px;
+      height: 48px;
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #1890ff;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    .loading-text {
+      color: #1890ff;
+      font-size: 16px;
+      font-weight: 500;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  }
+
+  ::ng-deep .ant-card-body {
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    flex: 1;
+    min-height: 0;
+  }
+
+  ::ng-deep .ant-list {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    min-height: 0;
+    
+    // Custom scrollbar
+    &::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: #888;
+      border-radius: 4px;
+
+      &:hover {
+        background: #555;
+      }
+    }
+  }
+}
+
+.todo-item {
+  transition: background-color 0.3s ease;
+  padding: 16px !important;
+
+  @media (max-width: 768px) {
+    padding: 12px !important;
+  }
+
+  @media (max-width: 576px) {
+    padding: 10px !important;
+  }
+
+  &:hover {
+    background-color: #f5f5f5;
+  }
+
+  &.completed {
+    background-color: #f6ffed;
+
+    &:hover {
+      background-color: #e6f7d6;
+    }
+  }
+
+  ::ng-deep .ant-list-item-meta {
+    align-items: flex-start;
+
+    .ant-list-item-meta-avatar {
+      margin-top: 4px;
+    }
+  }
+
+  ::ng-deep .ant-list-item-action {
+    margin-left: 16px;
+
+    @media (max-width: 576px) {
+      margin-left: 8px;
+      
+      > li {
+        padding: 0 4px;
+      }
+
+      button {
+        padding: 4px 8px;
+        font-size: 14px;
+      }
+    }
+  }
+
+  .todo-title-container {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    flex-wrap: wrap;
+
+    @media (max-width: 576px) {
+      gap: 8px;
+    }
+  }
+
+  .todo-checkbox {
+    margin-top: 2px;
+  }
+
+  .todo-title {
+    font-size: 16px;
+    font-weight: 500;
+    flex: 1;
+    min-width: 0;
+    word-break: break-word;
+
+    @media (max-width: 768px) {
+      font-size: 15px;
+    }
+
+    @media (max-width: 576px) {
+      font-size: 14px;
+      flex-basis: 100%;
+      margin-left: 32px;
+    }
+
+    &.completed-text {
+      text-decoration: line-through;
+      color: rgba(0, 0, 0, 0.45);
+    }
+  }
+
+  .status-tag {
+    @media (max-width: 576px) {
+      font-size: 11px;
+      padding: 0 6px;
+      line-height: 18px;
+    }
+  }
+
+  nz-list-item-meta-description {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-top: 8px;
+    gap: 4px;
+
+    @media (max-width: 576px) {
+      margin-top: 6px;
+      font-size: 11px;
+    }
+
+    .todo-id, .todo-user, .todo-date {
+      color: rgba(0, 0, 0, 0.45);
+      font-size: 12px;
+
+      @media (max-width: 576px) {
+        font-size: 11px;
+      }
+    }
+
+    .todo-date {
+      font-style: italic;
+    }
+
+    .separator {
+      margin: 0 8px;
+      color: rgba(0, 0, 0, 0.25);
+
+      @media (max-width: 576px) {
+        margin: 0 4px;
+      }
+    }
+  }
+}
+
+::ng-deep .ant-empty {
+  padding: 48px 24px;
+
+  @media (max-width: 576px) {
+    padding: 32px 16px;
+
+    .ant-empty-description {
+      font-size: 13px;
+    }
+
+    .ant-empty-image {
+      height: 40px;
+      margin-bottom: 8px;
+    }
+  }
+}
+
+// Pagination styles
+.pagination-container {
+  padding: 16px 24px;
+  border-top: 1px solid #f0f0f0;
+  background-color: #fff;
+  display: flex;
+  justify-content: center;
+
+  @media (max-width: 768px) {
+    padding: 12px 16px;
+  }
+
+  @media (max-width: 576px) {
+    padding: 10px 12px;
+  }
+
+  ::ng-deep .ant-pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+
+    @media (max-width: 768px) {
+      gap: 4px;
+    }
+
+    @media (max-width: 576px) {
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .ant-pagination-total-text {
+      order: -1;
+      margin-right: 16px;
+      font-size: 14px;
+
+      @media (max-width: 768px) {
+        font-size: 12px;
+        margin-right: 8px;
+      }
+
+      @media (max-width: 576px) {
+        order: 0;
+        margin-right: 0;
+        margin-bottom: 8px;
+      }
+    }
+
+    .ant-pagination-item,
+    .ant-pagination-prev,
+    .ant-pagination-next {
+      @media (max-width: 576px) {
+        min-width: 28px;
+        height: 28px;
+        line-height: 26px;
+        font-size: 12px;
+      }
+    }
+
+    .ant-pagination-options {
+      @media (max-width: 576px) {
+        .ant-select {
+          font-size: 12px;
+
+          .ant-select-selector {
+            padding: 0 8px;
+          }
+        }
+      }
+    }
+  }
+
+  // Pagination info text
+  ::ng-deep .ant-pagination-total-text {
+    color: rgba(0, 0, 0, 0.65);
+    font-weight: 500;
+
+    @media (max-width: 576px) {
+      display: none; // Hide total text on very small screens
+    }
+  }
+
+  // Simple pagination for mobile
+  ::ng-deep .ant-pagination-simple {
+    @media (max-width: 576px) {
+      .ant-pagination-simple-pager {
+        input {
+          width: 40px;
+          font-size: 12px;
+        }
+      }
+    }
+  }
+}

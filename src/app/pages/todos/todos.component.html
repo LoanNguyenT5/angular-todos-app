@@ -1,0 +1,215 @@
+<div class="todos-container">
+  <!-- Header with Statistics -->
+  <nz-card class="stats-card">
+    <div nz-row [nzGutter]="16">
+      <div nz-col [nzXs]="24" [nzSm]="8" [nzMd]="8">
+        <nz-statistic 
+          [nzValue]="stats.total" 
+          nzTitle="Total Tasks"
+          [nzPrefix]="totalIcon">
+        </nz-statistic>
+        <ng-template #totalIcon>
+          <nz-icon nzType="check-square" nzTheme="outline"></nz-icon>
+        </ng-template>
+      </div>
+      <div nz-col [nzXs]="24" [nzSm]="8" [nzMd]="8">
+        <nz-statistic 
+          [nzValue]="stats.completed" 
+          nzTitle="Completed"
+          [nzValueStyle]="{ color: '#52c41a' }"
+          [nzPrefix]="completedIcon">
+        </nz-statistic>
+        <ng-template #completedIcon>
+          <nz-icon nzType="check-circle" nzTheme="outline"></nz-icon>
+        </ng-template>
+      </div>
+      <div nz-col [nzXs]="24" [nzSm]="8" [nzMd]="8">
+        <nz-statistic 
+          [nzValue]="stats.pending" 
+          nzTitle="Pending"
+          [nzValueStyle]="{ color: '#faad14' }"
+          [nzPrefix]="pendingIcon">
+        </nz-statistic>
+        <ng-template #pendingIcon>
+          <nz-icon nzType="clock-circle" nzTheme="outline"></nz-icon>
+        </ng-template>
+      </div>
+    </div>
+  </nz-card>
+
+  <!-- Toolbar -->
+  <nz-card class="toolbar-card">
+    <div nz-row [nzGutter]="16" class="toolbar">
+      <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="12" [nzLg]="8" class="search-col">
+        <nz-input-group [nzPrefix]="searchIcon">
+          <input 
+            type="text" 
+            nz-input 
+            placeholder="Search todos..." 
+            [(ngModel)]="searchText"
+            (ngModelChange)="onSearchChange()"
+          />
+        </nz-input-group>
+        <ng-template #searchIcon>
+          <nz-icon nzType="search"></nz-icon>
+        </ng-template>
+      </div>
+      
+      <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="6" [nzLg]="4" class="filter-col">
+        <nz-select 
+          [(ngModel)]="currentFilter" 
+          (ngModelChange)="onFilterChange($event)"
+          nzPlaceHolder="Filter by status"
+          style="width: 100%;">
+          <nz-option nzValue="all" nzLabel="All Tasks"></nz-option>
+          <nz-option nzValue="pending" nzLabel="Pending"></nz-option>
+          <nz-option nzValue="completed" nzLabel="Completed"></nz-option>
+        </nz-select>
+      </div>
+
+      <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="6" [nzLg]="12" class="action-buttons">
+        <nz-space>
+          <button 
+            *nzSpaceItem 
+            nz-button 
+            nzType="primary" 
+            (click)="openAddModal()">
+            <nz-icon nzType="plus"></nz-icon>
+            <span class="button-text">Add Task</span>
+          </button>
+          <button 
+            *nzSpaceItem 
+            nz-button 
+            nzType="default" 
+            (click)="refreshFromApi()">
+            <nz-icon nzType="reload"></nz-icon>
+            <span class="button-text">Refresh</span>
+          </button>
+        </nz-space>
+      </div>
+    </div>
+  </nz-card>
+
+  <!-- Todo List -->
+  <nz-card class="list-card">
+    <nz-list 
+      [nzDataSource]="displayedTodos" 
+      [nzRenderItem]="todoItem">
+      
+      <ng-template #todoItem let-todo>
+        <nz-list-item 
+          [nzActions]="[editAction, deleteAction]" 
+          class="todo-item"
+          [class.completed]="todo.completed">
+          
+          <nz-list-item-meta>
+            <nz-list-item-meta-title>
+              <div class="todo-title-container">
+                <label 
+                  nz-checkbox 
+                  [ngModel]="todo.completed"
+                  (ngModelChange)="toggleComplete(todo)"
+                  class="todo-checkbox">
+                </label>
+                <span 
+                  class="todo-title" 
+                  [class.completed-text]="todo.completed">
+                  {{ todo.title }}
+                </span>
+                <nz-tag 
+                  *ngIf="todo.completed" 
+                  nzColor="success"
+                  class="status-tag">
+                  <nz-icon nzType="check"></nz-icon>
+                  Completed
+                </nz-tag>
+                <nz-tag 
+                  *ngIf="!todo.completed" 
+                  nzColor="warning"
+                  class="status-tag">
+                  <nz-icon nzType="clock-circle"></nz-icon>
+                  Pending
+                </nz-tag>
+              </div>
+            </nz-list-item-meta-title>
+            <nz-list-item-meta-description>
+              <span class="todo-id">ID: {{ todo.id }}</span>
+              <span class="separator">•</span>
+              <span class="todo-user">User: {{ todo.userId }}</span>
+              <span class="separator" *ngIf="todo.createDate">•</span>
+              <span class="todo-date" *ngIf="todo.createDate">{{ formatDate(todo.createDate) }}</span>
+            </nz-list-item-meta-description>
+          </nz-list-item-meta>
+
+          <ng-template #editAction>
+            <button 
+              nz-button 
+              nzType="link" 
+              (click)="openEditModal(todo)"
+              nz-tooltip
+              nzTooltipTitle="Edit task">
+              <nz-icon nzType="edit"></nz-icon>
+            </button>
+          </ng-template>
+
+          <ng-template #deleteAction>
+            <button 
+              nz-button 
+              nzType="link" 
+              nzDanger
+              nz-popconfirm
+              nzPopconfirmTitle="Are you sure you want to delete this task?"
+              nzPopconfirmPlacement="topRight"
+              (nzOnConfirm)="deleteTodo(todo.id!)"
+              nz-tooltip
+              nzTooltipTitle="Delete task">
+              <nz-icon nzType="delete"></nz-icon>
+            </button>
+          </ng-template>
+        </nz-list-item>
+      </ng-template>
+    </nz-list>
+
+    <!-- Empty State -->
+    <nz-empty 
+      *ngIf="displayedTodos.length === 0"
+      [nzNotFoundContent]="emptyContent">
+      <ng-template #emptyContent>
+        <div class="empty-state">
+          <nz-icon nzType="file-search" class="empty-icon"></nz-icon>
+          <p class="empty-title">No tasks found</p>
+          <p class="empty-description" *ngIf="searchText || currentFilter !== 'all'">
+            Try adjusting your filters or search terms
+          </p>
+          <button 
+            *ngIf="!searchText && currentFilter === 'all'" 
+            nz-button 
+            nzType="primary" 
+            (click)="openAddModal()">
+            <nz-icon nzType="plus"></nz-icon>
+            Create your first task
+          </button>
+        </div>
+      </ng-template>
+    </nz-empty>
+
+    <!-- Pagination -->
+    <div class="pagination-container">
+      <nz-pagination
+        [nzPageIndex]="pageIndex"
+        [nzPageSize]="pageSize"
+        [nzTotal]="total"
+        [nzPageSizeOptions]="pageSizeOptions"
+        [nzShowSizeChanger]="true"
+        [nzShowTotal]="totalTemplate"
+        (nzPageIndexChange)="onPageIndexChange($event)"
+        (nzPageSizeChange)="onPageSizeChange($event)"
+        nzResponsive>
+      </nz-pagination>
+      <ng-template #totalTemplate let-total let-range="range">
+        {{ range[0] }}-{{ range[1] }} of {{ total }} tasks
+      </ng-template>
+    </div>
+  </nz-card>
+</div>
+
