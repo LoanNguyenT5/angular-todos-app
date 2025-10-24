@@ -28,7 +28,7 @@ A modern, feature-rich To-Do application built with Angular 20, Ng-Zorro (Ant De
 
 1. Clone the repository or navigate to the project directory:
 ```bash
-cd angular-practical
+cd angular-todos-app
 ```
 
 2. Install dependencies:
@@ -62,18 +62,10 @@ src/app/
 │       └── todos.routes.ts
 ├── services/
 │   └── todo.service.ts
-├── sidebar/
-│   ├── app-sidebar.component.ts
-│   ├── app-sidebar.component.html
-│   └── app-sidebar.component.scss
 ├── header/
 │   ├── app-header.component.ts
 │   ├── app-header.component.html
 │   └── app-header.component.scss
-├── breadcrumb/
-│   ├── breadcrumb.component.ts
-│   ├── breadcrumb.component.html
-│   └── breadcrumb.component.scss
 ├── app.ts
 ├── app.html
 ├── app.routes.ts
@@ -188,13 +180,6 @@ Run unit tests:
 ```bash
 npm test
 ```
-
-## 📝 Notes
-
-- The application automatically saves data to localStorage
-- API requests have error handling with fallback to local storage
-- The UI provides immediate feedback for all user actions
-- All operations are optimized for performance
 
 ## 🤝 Contributing
 
